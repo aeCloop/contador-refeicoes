@@ -22,6 +22,14 @@
     <main class="card">
       <h1>Contador de Refeições</h1>
 
+      <!-- ✅ Unidade -->
+      <section class="grid">
+        <div>
+          <label for="unidade">Unidade</label>
+          <input id="unidade" type="text" placeholder="Ex: Matriz - Centro" />
+        </div>
+      </section>
+
       <section class="grid">
         <div>
           <label for="data">Data</label>
@@ -77,6 +85,8 @@
 
       <div id="printHeader" class="print-header">
         <h2>Relatório de Refeições</h2>
+        <!-- ✅ Unidade no PDF -->
+        <p id="printUnidade"></p>
         <p id="printMes"></p>
         <p id="printDataEmissao"></p>
         <hr />
