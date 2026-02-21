@@ -292,12 +292,47 @@ button.small{
     background:#fff;
     color:#000;
   }
+
+  /* esconde controles */
   .actions, .right, #msg{ display:none !important; }
+
   .print-header{ display:block; color:#000; }
-  .table-wrap{ border:0; }
-  thead{ display:table-header-group; }
-  table, tbody, tr, td{ display:table-row-group; }
+  .table-wrap{ border:0; background:#fff; }
+
+  /* ===== PDF: tabela em colunas (Dia/Almoço/Jantar/Total) ===== */
+  .table-wrap table{
+    width:100% !important;
+    border-collapse: collapse !important;
+  }
+
+  .table-wrap thead{ display: table-header-group !important; }
+  .table-wrap tbody{ display: table-row-group !important; }
+  .table-wrap tr{ display: table-row !important; page-break-inside: avoid; }
+
+  .table-wrap th,
+  .table-wrap td{
+    display: table-cell !important;
+    padding: 8px 10px !important;
+    border-bottom: 1px solid #e5e7eb !important;
+    color:#000 !important;
+    background:#fff !important;
+    text-align:left !important;
+    vertical-align: top !important;
+  }
+
+  /* remove os rótulos do mobile-card (Dia:, Almoço:, ...) */
+  .table-wrap td::before{
+    content:"" !important;
+    display:none !important;
+  }
+
+  /* esconder coluna Ações no PDF */
+  .table-wrap th:last-child,
+  .table-wrap td.actions{
+    display:none !important;
+  }
 }
+
 /* === FIX MOBILE: nada pode estourar a tela === */
 html, body { width: 100%; overflow-x: hidden; }
 * { box-sizing: border-box; max-width: 100%; }
