@@ -1,9 +1,8 @@
+const printUnidadeEl = document.querySelector("#printUnidade");
 const printMesEl = document.querySelector("#printMes");
 const printDataEmissaoEl = document.querySelector("#printDataEmissao");
-const printUnidadeEl = document.querySelector("#printUnidade");
 
 const unidadeEl = document.querySelector("#unidade");
-
 const dataEl = document.querySelector("#data");
 const almocoEl = document.querySelector("#almoco");
 const jantarEl = document.querySelector("#jantar");
@@ -23,7 +22,7 @@ const totalGeralEl = document.querySelector("#totalGeral");
 const msgEl = document.querySelector("#msg");
 
 const STORAGE_KEY = "refeicoes_v1";
-const STORAGE_KEY_UNIDADE = "refeicoes_unidade_v1";
+const STORAGE_UNIDADE_KEY = "refeicoes_unidade_v1";
 
 function hojeISO() {
   const d = new Date();
@@ -53,15 +52,11 @@ function saveData(data) {
 }
 
 function loadUnidade() {
-  try {
-    return localStorage.getItem(STORAGE_KEY_UNIDADE) ?? "";
-  } catch {
-    return "";
-  }
+  return localStorage.getItem(STORAGE_UNIDADE_KEY) || "";
 }
 
 function saveUnidade(value) {
-  localStorage.setItem(STORAGE_KEY_UNIDADE, value ?? "");
+  localStorage.setItem(STORAGE_UNIDADE_KEY, value);
 }
 
 function toInt(v) {
@@ -70,6 +65,7 @@ function toInt(v) {
 }
 
 function setMsg(text) {
+  if (!msgEl) return;
   msgEl.textContent = text;
   if (text) setTimeout(() => (msgEl.textContent = ""), 2500);
 }
@@ -106,7 +102,7 @@ function render() {
       <td data-label="Almoço">${e.almoco}</td>
       <td data-label="Jantar">${e.jantar}</td>
       <td data-label="Total do dia"><strong>${totalDia}</strong></td>
-      <td class="actions" data-label="Ações">
+      <td class="actions no-print" data-label="Ações">
         <button class="small secundario" data-edit="${e.date}">Editar</button>
         <button class="small perigo" data-del="${e.date}">Excluir</button>
       </td>
@@ -131,6 +127,12 @@ function scrollToRelatorio() {
   if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+function limparInputsRefeicao() {
+  // ✅ após salvar, zera/limpa as caixas
+  almocoEl.value = "0";
+  jantarEl.value = "0";
+}
+
 function salvarDia() {
   const date = dataEl.value;
   if (!date) {
@@ -145,13 +147,11 @@ function salvarDia() {
   all[date] = { almoco, jantar };
   saveData(all);
 
-  // ✅ ZERA OS CAMPOS
-  almocoEl.value = 0;
-  jantarEl.value = 0;
-
   setMsg("Salvo ✅");
   render();
   scrollToRelatorio();
+
+  limparInputsRefeicao();
 }
 
 function editarDia(date) {
@@ -160,8 +160,8 @@ function editarDia(date) {
   if (!val) return;
 
   dataEl.value = date;
-  almocoEl.value = val.almoco ?? 0;
-  jantarEl.value = val.jantar ?? 0;
+  almocoEl.value = String(val.almoco ?? 0);
+  jantarEl.value = String(val.jantar ?? 0);
   setMsg("Editando... altere e clique em Salvar.");
 }
 
@@ -169,14 +169,9 @@ function excluirDia(date) {
   const all = loadData();
   if (!all[date]) return;
 
-  const dia = date.slice(8, 10);
-  const ym = date.slice(0, 7);
-
-  const ok = confirm(`Tem certeza que deseja excluir o registro do dia ${dia}/${ym.replace("-", "/")}?`);
-  if (!ok) {
-    setMsg("Exclusão cancelada.");
-    return;
-  }
+  // ✅ confirmação
+  const ok = confirm(`Tem certeza que deseja excluir o dia ${date.slice(8, 10)}?`);
+  if (!ok) return;
 
   delete all[date];
   saveData(all);
@@ -187,14 +182,10 @@ function excluirDia(date) {
 
 function limparMesAtual() {
   const ym = mesEl.value || mesAtualISO();
+  const ok = confirm(`Tem certeza que deseja limpar o mês ${ym}?`);
+  if (!ok) return;
+
   const all = loadData();
-
-  const ok = confirm("Tem certeza que deseja limpar TODOS os registros deste mês?");
-  if (!ok) {
-    setMsg("Limpeza cancelada.");
-    return;
-  }
-
   for (const date of Object.keys(all)) {
     if (date.startsWith(ym + "-")) delete all[date];
   }
@@ -235,9 +226,6 @@ function exportarCSV() {
 }
 
 function imprimirRelatorio() {
-  // garante que o PDF sempre reflita o estado atual
-  render();
-
   const ym = mesEl.value || mesAtualISO();
   const [ano, mes] = ym.split("-");
 
@@ -246,12 +234,9 @@ function imprimirRelatorio() {
     year: "numeric",
   });
 
-  const unidade = (unidadeEl?.value ?? loadUnidade()).trim();
+  const unidade = (unidadeEl?.value || "").trim();
 
-  if (printUnidadeEl) {
-    printUnidadeEl.textContent = unidade ? `Unidade: ${unidade}` : "Unidade: (não informada)";
-  }
-
+  if (printUnidadeEl) printUnidadeEl.textContent = unidade ? `Unidade: ${unidade}` : "";
   if (printMesEl) printMesEl.textContent = `Mês: ${nomeMes}`;
   if (printDataEmissaoEl) {
     printDataEmissaoEl.textContent = `Emitido em: ${new Date().toLocaleDateString("pt-BR")}`;
@@ -260,6 +245,20 @@ function imprimirRelatorio() {
   window.print();
 }
 
+/* ✅ remove o zero ao focar e volta zero se sair vazio */
+function setupZeroBehavior(inputEl) {
+  if (!inputEl) return;
+
+  inputEl.addEventListener("focus", () => {
+    if (inputEl.value === "0") inputEl.value = "";
+  });
+
+  inputEl.addEventListener("blur", () => {
+    if (inputEl.value.trim() === "") inputEl.value = "0";
+  });
+}
+
+/* Eventos tabela */
 tbody.addEventListener("click", (e) => {
   const btn = e.target.closest("button");
   if (!btn) return;
@@ -284,11 +283,7 @@ btnImprimir.addEventListener("click", imprimirRelatorio);
 
 mesEl.addEventListener("change", render);
 
-// Defaults
-dataEl.value = hojeISO();
-mesEl.value = mesAtualISO();
-
-// Unidade (salva automaticamente)
+/* Unidade: persistência */
 if (unidadeEl) {
   unidadeEl.value = loadUnidade();
   unidadeEl.addEventListener("input", () => {
@@ -296,20 +291,9 @@ if (unidadeEl) {
   });
 }
 
-// ✅ Remove o zero ao focar e volta zero se sair vazio
-function setupZeroBehavior(inputEl) {
-  inputEl.addEventListener("focus", () => {
-    if (inputEl.value === "0") {
-      inputEl.value = "";
-    }
-  });
-
-  inputEl.addEventListener("blur", () => {
-    if (inputEl.value.trim() === "") {
-      inputEl.value = "0";
-    }
-  });
-}
+/* Defaults */
+dataEl.value = hojeISO();
+mesEl.value = mesAtualISO();
 
 setupZeroBehavior(almocoEl);
 setupZeroBehavior(jantarEl);

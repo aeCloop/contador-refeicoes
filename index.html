@@ -20,72 +20,75 @@
 
   <body>
     <main class="card">
-      <h1>Contador de Refeições</h1>
+      <h1 class="no-print">Contador de Refeições</h1>
 
-      <!-- ✅ Unidade -->
-      <section class="grid">
-        <div>
-          <label for="unidade">Unidade</label>
-          <input id="unidade" type="text" placeholder="Ex: Matriz - Centro" />
+      <!-- ✅ TUDO AQUI SOME NO PDF -->
+      <div class="no-print">
+        <!-- ✅ Unidade -->
+        <section class="grid">
+          <div>
+            <label for="unidade">Unidade</label>
+            <input id="unidade" type="text" placeholder="Ex: Matriz - Centro" />
+          </div>
+        </section>
+
+        <section class="grid">
+          <div>
+            <label for="data">Data</label>
+            <input id="data" type="date" />
+          </div>
+
+          <div>
+            <label for="almoco">Almoço (qtd)</label>
+            <input
+              id="almoco"
+              type="number"
+              min="0"
+              step="1"
+              value="0"
+              inputmode="numeric"
+              pattern="[0-9]*"
+            />
+          </div>
+
+          <div>
+            <label for="jantar">Jantar (qtd)</label>
+            <input
+              id="jantar"
+              type="number"
+              min="0"
+              step="1"
+              value="0"
+              inputmode="numeric"
+              pattern="[0-9]*"
+            />
+          </div>
+        </section>
+
+        <div class="actions">
+          <button id="btnSalvar">Salvar dia</button>
+          <button id="btnHoje" class="secundario">Hoje</button>
+          <button id="btnLimparMes" class="perigo">Limpar mês</button>
         </div>
-      </section>
 
-      <section class="grid">
-        <div>
-          <label for="data">Data</label>
-          <input id="data" type="date" />
-        </div>
+        <hr />
 
-        <div>
-          <label for="almoco">Almoço (qtd)</label>
-          <input
-            id="almoco"
-            type="number"
-            min="0"
-            step="1"
-            value="0"
-            inputmode="numeric"
-            pattern="[0-9]*"
-          />
-        </div>
+        <section class="grid">
+          <div>
+            <label for="mes">Mês</label>
+            <input id="mes" type="month" />
+          </div>
 
-        <div>
-          <label for="jantar">Jantar (qtd)</label>
-          <input
-            id="jantar"
-            type="number"
-            min="0"
-            step="1"
-            value="0"
-            inputmode="numeric"
-            pattern="[0-9]*"
-          />
-        </div>
-      </section>
-
-      <div class="actions">
-        <button id="btnSalvar">Salvar dia</button>
-        <button id="btnHoje" class="secundario">Hoje</button>
-        <button id="btnLimparMes" class="perigo">Limpar mês</button>
+          <div class="right">
+            <button id="btnExportar" class="secundario">Exportar CSV</button>
+            <button id="btnImprimir" class="secundario">Imprimir PDF</button>
+          </div>
+        </section>
       </div>
 
-      <hr />
-
-      <section class="grid">
-        <div>
-          <label for="mes">Mês</label>
-          <input id="mes" type="month" />
-        </div>
-
-        <div class="right">
-          <button id="btnExportar" class="secundario">Exportar CSV</button>
-          <button id="btnImprimir" class="secundario">Imprimir PDF</button>
-        </div>
-      </section>
-
+      <!-- ✅ CABEÇALHO DO PDF (APARECE SÓ NO PDF) -->
       <div id="printHeader" class="print-header">
         <h2>Relatório de Refeições</h2>
-        <!-- ✅ Unidade no PDF -->
         <p id="printUnidade"></p>
         <p id="printMes"></p>
         <p id="printDataEmissao"></p>
@@ -102,7 +105,7 @@
               <th>Almoço</th>
               <th>Jantar</th>
               <th>Total do dia</th>
-              <th>Ações</th>
+              <th class="no-print">Ações</th>
             </tr>
           </thead>
           <tbody id="tbody"></tbody>
@@ -124,7 +127,7 @@
         </div>
       </div>
 
-      <p id="msg" class="msg" aria-live="polite"></p>
+      <p id="msg" class="msg no-print" aria-live="polite"></p>
     </main>
 
     <script src="script.js"></script>
@@ -135,9 +138,7 @@
         window.addEventListener("load", async () => {
           try {
             await navigator.serviceWorker.register("./service-worker.js", { scope: "./" });
-          } catch (e) {
-            // silencioso
-          }
+          } catch (e) {}
         });
       }
     </script>

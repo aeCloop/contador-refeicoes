@@ -25,7 +25,7 @@
 }
 
 *{ box-sizing:border-box; }
-html,body{ height:100%; }
+html,body{ height:100%; width:100%; overflow-x:hidden; }
 body{
   margin:0;
   font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
@@ -34,10 +34,10 @@ body{
     radial-gradient(900px 500px at 20% 0%, #13224a 0%, var(--bg1) 55%),
     radial-gradient(700px 450px at 100% 20%, #0f2a25 0%, transparent 55%),
     linear-gradient(180deg,var(--bg0),var(--bg1));
+
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
 
-  /* iPhone safe areas */
   padding: env(safe-area-inset-top) env(safe-area-inset-right)
            env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
@@ -53,7 +53,6 @@ main.card{
   padding: 16px 14px 18px;
 }
 
-/* Títulos */
 h1{
   margin: 2px 0 14px;
   font-size: 24px;
@@ -72,7 +71,6 @@ label{
   margin-bottom: 8px;
 }
 
-/* Inputs mobile UX (evita zoom no iOS com 16px) */
 input{
   width:100%;
   background: rgba(2,6,23,.35);
@@ -82,7 +80,7 @@ input{
   padding: 12px 12px;
   font-size: 16px;
   outline: none;
-  min-height: 46px; /* toque confortável */
+  min-height: 46px;
 }
 
 input:focus{
@@ -90,14 +88,12 @@ input:focus{
   box-shadow: 0 0 0 3px rgba(34,197,94,.16);
 }
 
-/* Layout geral: mobile-first 1 coluna */
 .grid{
   display:grid;
   grid-template-columns: 1fr;
   gap: var(--gap);
 }
 
-/* Botões */
 button{
   border:0;
   border-radius: 16px;
@@ -129,7 +125,6 @@ button.perigo{
   color:#fff;
 }
 
-/* ✅ Ações principais (Salvar/Hoje/Limpar) com cara de app */
 .actions{
   display:grid;
   grid-template-columns: 1fr 1fr;
@@ -137,14 +132,13 @@ button.perigo{
   margin-top: 10px;
 }
 
-#btnSalvar{ grid-column: 1 / -1; } /* salvar fica grandão */
+#btnSalvar{ grid-column: 1 / -1; }
 
 @media (min-width: 520px){
-  #btnSalvar{ grid-column:auto; } /* em telas maiores vira normal */
+  #btnSalvar{ grid-column:auto; }
   .actions{ grid-template-columns: repeat(3, 1fr); }
 }
 
-/* Área do mês + exportar/imprimir */
 .right{
   display:grid;
   grid-template-columns: 1fr 1fr;
@@ -153,17 +147,15 @@ button.perigo{
 }
 
 @media (max-width: 360px){
-  .right{ grid-template-columns: 1fr; } /* telas muito pequenas */
+  .right{ grid-template-columns: 1fr; }
 }
 
-/* Separador */
 hr{
   border:none;
   border-top:1px solid var(--border);
   margin: 16px 0;
 }
 
-/* ✅ Tabela: vira “cards” no celular (UX real) */
 .table-wrap{
   width:100%;
   border: 1px solid var(--border);
@@ -172,7 +164,6 @@ hr{
   overflow: hidden;
 }
 
-/* Desktop/tablet: tabela normal */
 table{
   width:100%;
   border-collapse: collapse;
@@ -203,7 +194,7 @@ button.small{
   font-size: 14px;
 }
 
-/* ✅ Mobile Cards */
+/* Mobile Cards */
 @media (max-width: 720px){
   thead{ display:none; }
   table, tbody, tr, td{ display:block; width:100%; }
@@ -219,14 +210,12 @@ button.small{
     gap: 10px;
   }
 
-  /* rotulagem automática pelo atributo data-label (se não tiver, usamos nth-child fallback) */
   tbody td::before{
     content: attr(data-label);
     color: var(--muted);
     font-size: 13px;
   }
 
-  /* fallback simples se seu HTML não usa data-label */
   tbody td:nth-child(1)::before{ content:"Dia"; }
   tbody td:nth-child(2)::before{ content:"Almoço"; }
   tbody td:nth-child(3)::before{ content:"Jantar"; }
@@ -241,7 +230,6 @@ button.small{
   }
 }
 
-/* Totais como cards */
 .totais{
   display:grid;
   grid-template-columns: 1fr;
@@ -272,94 +260,56 @@ button.small{
   background: rgba(34,197,94,.08);
 }
 
-/* Mensagens */
 .msg{
   min-height: 22px;
   margin-top: 12px;
   color: #a7f3d0;
 }
 
-/* Impressão (PDF) */
+/* ===== PDF / IMPRESSÃO ===== */
 .print-header{ display:none; }
+.no-print{ display:block; }
 
 @media print{
-  body{ background:#fff; padding:0; }
-  main.card{
-    width:100%;
-    margin:0;
-    border:0;
-    box-shadow:none;
-    background:#fff;
-    color:#000;
+  body{
+    background:#fff !important;
+    padding:0 !important;
+    color:#000 !important;
   }
 
-  /* esconde controles */
-  .actions, .right, #msg{ display:none !important; }
+  main.card{
+    width:100% !important;
+    margin:0 !important;
+    border:0 !important;
+    box-shadow:none !important;
+    background:#fff !important;
+    color:#000 !important;
+  }
 
-  .print-header{ display:block; color:#000; }
-  .table-wrap{ border:0; background:#fff; }
+  /* ✅ some com o que você marcou de vermelho */
+  .no-print{ display:none !important; }
 
-  /* ===== PDF: tabela em colunas (Dia/Almoço/Jantar/Total) ===== */
-  .table-wrap table{
+  /* ✅ aparece o cabeçalho do relatório */
+  .print-header{ display:block !important; color:#000 !important; }
+
+  /* ✅ força tabela normal no PDF (sem modo mobile) */
+  .table-wrap{ border:0 !important; background:#fff !important; }
+  table{
     width:100% !important;
     border-collapse: collapse !important;
   }
 
-  .table-wrap thead{ display: table-header-group !important; }
-  .table-wrap tbody{ display: table-row-group !important; }
-  .table-wrap tr{ display: table-row !important; page-break-inside: avoid; }
+  thead{ display:table-header-group !important; }
+  tbody{ display:table-row-group !important; }
+  tr{ display:table-row !important; }
+  th, td{
+    display:table-cell !important;
+    padding: 10px !important;
+    border-bottom: 1px solid #ddd !important;
+  }
 
-  .table-wrap th,
-  .table-wrap td{
-    display: table-cell !important;
-    padding: 8px 10px !important;
-    border-bottom: 1px solid #e5e7eb !important;
+  thead th{
+    background:#f5f5f5 !important;
     color:#000 !important;
-    background:#fff !important;
-    text-align:left !important;
-    vertical-align: top !important;
   }
-
-  /* remove os rótulos do mobile-card (Dia:, Almoço:, ...) */
-  .table-wrap td::before{
-    content:"" !important;
-    display:none !important;
-  }
-
-  /* esconder coluna Ações no PDF */
-  .table-wrap th:last-child,
-  .table-wrap td.actions{
-    display:none !important;
-  }
-}
-
-/* === FIX MOBILE: nada pode estourar a tela === */
-html, body { width: 100%; overflow-x: hidden; }
-* { box-sizing: border-box; max-width: 100%; }
-
-.card{
-  width: 100% !important;
-  margin: 12px auto !important;
-  padding: 16px !important;
-}
-
-.grid, .actions, .right{
-  width: 100% !important;
-}
-
-button, input{
-  width: 100% !important;
-}
-
-/* evita botões/inputs maiores que o container em grids */
-.actions, .right{
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-}
-
-/* em telas um pouco maiores pode voltar a 2 colunas */
-@media (min-width: 520px){
-  .actions{ grid-template-columns: repeat(3, 1fr); }
-  .right{ grid-template-columns: 1fr 1fr; }
 }
