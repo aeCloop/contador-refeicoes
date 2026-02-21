@@ -59,7 +59,6 @@ function setMsg(text) {
 }
 
 function getMonthEntries(all, ym) {
-  // ym: "YYYY-MM"
   const entries = Object.entries(all)
     .filter(([date]) => date.startsWith(ym + "-"))
     .map(([date, val]) => ({ date, almoco: val.almoco ?? 0, jantar: val.jantar ?? 0 }));
@@ -84,7 +83,7 @@ function render() {
     totalJantar += e.jantar;
 
     const tr = document.createElement("tr");
-    const dia = e.date.slice(8, 10); // DD
+    const dia = e.date.slice(8, 10);
 
     tr.innerHTML = `
       <td>${dia}</td>
@@ -111,6 +110,11 @@ function render() {
   }
 }
 
+function scrollToRelatorio() {
+  const el = document.querySelector("h2"); // o primeiro h2 (Relatório de Refeições/Relatório do mês)
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 function salvarDia() {
   const date = dataEl.value;
   if (!date) {
@@ -127,6 +131,7 @@ function salvarDia() {
 
   setMsg("Salvo ✅");
   render();
+  scrollToRelatorio();
 }
 
 function editarDia(date) {

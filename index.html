@@ -2,10 +2,22 @@
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0f172a" />
     <title>Contador de Refeições</title>
+
     <link rel="stylesheet" href="style.css" />
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.webmanifest" />
+
+    <!-- iOS (instalar na tela inicial) -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Refeições" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
   </head>
+
   <body>
     <main class="card">
       <h1>Contador de Refeições</h1>
@@ -18,12 +30,28 @@
 
         <div>
           <label for="almoco">Almoço (qtd)</label>
-          <input id="almoco" type="number" min="0" step="1" value="0" />
+          <input
+            id="almoco"
+            type="number"
+            min="0"
+            step="1"
+            value="0"
+            inputmode="numeric"
+            pattern="[0-9]*"
+          />
         </div>
 
         <div>
           <label for="jantar">Jantar (qtd)</label>
-          <input id="jantar" type="number" min="0" step="1" value="0" />
+          <input
+            id="jantar"
+            type="number"
+            min="0"
+            step="1"
+            value="0"
+            inputmode="numeric"
+            pattern="[0-9]*"
+          />
         </div>
       </section>
 
@@ -47,7 +75,6 @@
         </div>
       </section>
 
-      <!-- Cabeçalho que aparece APENAS na impressão/PDF -->
       <div id="printHeader" class="print-header">
         <h2>Relatório de Refeições</h2>
         <p id="printMes"></p>
@@ -91,5 +118,18 @@
     </main>
 
     <script src="script.js"></script>
+
+    <!-- Registro do Service Worker -->
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", async () => {
+          try {
+            await navigator.serviceWorker.register("./service-worker.js", { scope: "./" });
+          } catch (e) {
+            // silencioso
+          }
+        });
+      }
+    </script>
   </body>
 </html>
