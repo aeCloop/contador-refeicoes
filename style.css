@@ -270,46 +270,66 @@ button.small{
 .print-header{ display:none; }
 .no-print{ display:block; }
 
-@media print{
-  body{
-    background:#fff !important;
-    padding:0 !important;
-    color:#000 !important;
+@media print {
+  body {
+    background: #fff !important;
+    padding: 0 !important;
+    color: #000 !important;
   }
 
-  main.card{
-    width:100% !important;
-    margin:0 !important;
-    border:0 !important;
-    box-shadow:none !important;
-    background:#fff !important;
-    color:#000 !important;
+  main.card {
+    width: 100% !important;
+    margin: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    color: #000 !important;
   }
 
-  /* ✅ some com o que você marcou de vermelho */
-  .no-print{ display:none !important; }
+  /* some tudo que não é do relatório */
+  .no-print { display: none !important; }
+  .print-header { display: block !important; color: #000 !important; }
 
-  /* ✅ aparece o cabeçalho do relatório */
-  .print-header{ display:block !important; color:#000 !important; }
+  /* garante “tabela de verdade” */
+  .table-wrap { border: 0 !important; background: #fff !important; overflow: visible !important; }
 
-  /* ✅ força tabela normal no PDF (sem modo mobile) */
-  .table-wrap{ border:0 !important; background:#fff !important; }
-  table{
-    width:100% !important;
+  table { 
+    width: 100% !important;
     border-collapse: collapse !important;
+    table-layout: fixed !important;
   }
 
-  thead{ display:table-header-group !important; }
-  tbody{ display:table-row-group !important; }
-  tr{ display:table-row !important; }
-  th, td{
-    display:table-cell !important;
-    padding: 10px !important;
+  thead { display: table-header-group !important; }
+  tbody { display: table-row-group !important; }
+  tr    { display: table-row !important; }
+
+  th, td {
+    display: table-cell !important;
+    padding: 10px 8px !important;
     border-bottom: 1px solid #ddd !important;
+    vertical-align: middle !important;
+    color: #000 !important;
+    white-space: nowrap !important;
   }
 
-  thead th{
-    background:#f5f5f5 !important;
-    color:#000 !important;
+  thead th {
+    background: #f3f4f6 !important;
+    font-weight: 700 !important;
   }
+
+  /* ✅ MUITO IMPORTANTE: mata os rótulos do modo mobile no PDF */
+  tbody td::before { content: none !important; display: none !important; }
+
+  /* remove a coluna Ações no PDF */
+  th:last-child, td:last-child { display: none !important; }
+
+  /* alinhamentos bons pro relatório */
+  th:nth-child(1), td:nth-child(1) { width: 18% !important; text-align: left !important; }
+  th:nth-child(2), td:nth-child(2) { width: 22% !important; text-align: right !important; }
+  th:nth-child(3), td:nth-child(3) { width: 22% !important; text-align: right !important; }
+  th:nth-child(4), td:nth-child(4) { width: 28% !important; text-align: right !important; }
+
+  /* evita quebrar estranho */
+  .totais { margin-top: 14px !important; }
+  .box strong { font-size: 18px !important; }
 }
