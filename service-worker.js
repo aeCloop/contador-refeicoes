@@ -1,4 +1,4 @@
-const CACHE_NAME = "refeicoes-cache-v10";
+const CACHE_NAME = "refeicoes-cache-v11";
 const ASSETS = [
   "./",
   "./index.html",
