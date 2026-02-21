@@ -298,3 +298,33 @@ button.small{
   thead{ display:table-header-group; }
   table, tbody, tr, td{ display:table-row-group; }
 }
+/* === FIX MOBILE: nada pode estourar a tela === */
+html, body { width: 100%; overflow-x: hidden; }
+* { box-sizing: border-box; max-width: 100%; }
+
+.card{
+  width: 100% !important;
+  margin: 12px auto !important;
+  padding: 16px !important;
+}
+
+.grid, .actions, .right{
+  width: 100% !important;
+}
+
+button, input{
+  width: 100% !important;
+}
+
+/* evita botões/inputs maiores que o container em grids */
+.actions, .right{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+/* em telas um pouco maiores pode voltar a 2 colunas */
+@media (min-width: 520px){
+  .actions{ grid-template-columns: repeat(3, 1fr); }
+  .right{ grid-template-columns: 1fr 1fr; }
+}
