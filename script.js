@@ -145,6 +145,10 @@ function salvarDia() {
   all[date] = { almoco, jantar };
   saveData(all);
 
+  // ✅ ZERA OS CAMPOS
+  almocoEl.value = 0;
+  jantarEl.value = 0;
+
   setMsg("Salvo ✅");
   render();
   scrollToRelatorio();
@@ -291,5 +295,23 @@ if (unidadeEl) {
     saveUnidade(unidadeEl.value.trim());
   });
 }
+
+// ✅ Remove o zero ao focar e volta zero se sair vazio
+function setupZeroBehavior(inputEl) {
+  inputEl.addEventListener("focus", () => {
+    if (inputEl.value === "0") {
+      inputEl.value = "";
+    }
+  });
+
+  inputEl.addEventListener("blur", () => {
+    if (inputEl.value.trim() === "") {
+      inputEl.value = "0";
+    }
+  });
+}
+
+setupZeroBehavior(almocoEl);
+setupZeroBehavior(jantarEl);
 
 render();
