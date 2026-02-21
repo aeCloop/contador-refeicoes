@@ -86,15 +86,15 @@ function render() {
     const dia = e.date.slice(8, 10);
 
     tr.innerHTML = `
-      <td>${dia}</td>
-      <td>${e.almoco}</td>
-      <td>${e.jantar}</td>
-      <td><strong>${totalDia}</strong></td>
-      <td class="actions">
-        <button class="small secundario" data-edit="${e.date}">Editar</button>
-        <button class="small perigo" data-del="${e.date}">Excluir</button>
-      </td>
-    `;
+  <td data-label="Dia">${dia}</td>
+  <td data-label="Almoço">${e.almoco}</td>
+  <td data-label="Jantar">${e.jantar}</td>
+  <td data-label="Total do dia"><strong>${totalDia}</strong></td>
+  <td class="actions" data-label="Ações">
+    <button class="small secundario" data-edit="${e.date}">Editar</button>
+    <button class="small perigo" data-del="${e.date}">Excluir</button>
+  </td>
+`;
 
     tbody.appendChild(tr);
   }

@@ -1,231 +1,264 @@
-/* Mobile-first, PWA friendly */
 :root{
-  --bg: #0b1220;
-  --card: rgba(255,255,255,.06);
-  --border: rgba(148,163,184,.18);
-  --text: #e5e7eb;
-  --muted: #cbd5e1;
+  --bg0:#070b14;
+  --bg1:#0b1220;
+  --card:rgba(255,255,255,.06);
+  --card2:rgba(255,255,255,.08);
+  --border:rgba(148,163,184,.18);
 
-  --primary: #22c55e;
-  --primary-2: #16a34a;
+  --text:#e5e7eb;
+  --muted:#b6c2d6;
 
-  --danger: #ef4444;
-  --danger-2: #dc2626;
+  --green:#22c55e;
+  --green2:#16a34a;
 
-  --secondary: rgba(148,163,184,.18);
+  --red:#ef4444;
+  --red2:#dc2626;
 
-  --radius: 18px;
-  --shadow: 0 18px 60px rgba(0,0,0,.35);
+  --slate:rgba(148,163,184,.20);
 
-  --pad: 14px;      /* base padding mobile */
-  --pad-lg: 18px;   /* desktop padding */
+  --r16:16px;
+  --r18:18px;
+  --shadow:0 20px 70px rgba(0,0,0,.45);
+
+  --pad:14px;
+  --gap:12px;
 }
 
-*{ box-sizing: border-box; }
-html, body{ height: 100%; }
-
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
 body{
-  margin: 0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background: radial-gradient(1200px 600px at 20% 0%, #122042 0%, var(--bg) 55%);
-  color: var(--text);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  margin:0;
+  font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(900px 500px at 20% 0%, #13224a 0%, var(--bg1) 55%),
+    radial-gradient(700px 450px at 100% 20%, #0f2a25 0%, transparent 55%),
+    linear-gradient(180deg,var(--bg0),var(--bg1));
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 
-  /* iPhone notch safe area */
+  /* iPhone safe areas */
   padding: env(safe-area-inset-top) env(safe-area-inset-right)
            env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 main.card{
-  width: min(980px, calc(100% - 24px));
-  margin: 18px auto;
-  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+  width: min(980px, calc(100% - 20px));
+  margin: 12px auto 18px;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
   box-shadow: var(--shadow);
-  padding: var(--pad);
   backdrop-filter: blur(10px);
+  padding: 16px 14px 18px;
 }
 
+/* Títulos */
 h1{
-  margin: 0 0 14px;
-  font-size: clamp(22px, 3.8vw, 34px);
+  margin: 2px 0 14px;
+  font-size: 24px;
   letter-spacing: .2px;
 }
 h2{
-  margin: 18px 0 12px;
-  font-size: clamp(18px, 3.2vw, 22px);
-  color: #f1f5f9;
+  margin: 18px 0 10px;
+  font-size: 18px;
+  color:#f1f5f9;
 }
 
 label{
   display:block;
-  font-size: 13px;
   color: var(--muted);
+  font-size: 13px;
   margin-bottom: 8px;
 }
 
+/* Inputs mobile UX (evita zoom no iOS com 16px) */
 input{
-  width: 100%;
-  border-radius: 14px;
-  border: 1px solid var(--border);
+  width:100%;
   background: rgba(2,6,23,.35);
+  border: 1px solid var(--border);
   color: var(--text);
+  border-radius: 16px;
   padding: 12px 12px;
-  font-size: 16px; /* 16 evita zoom automático no iOS */
+  font-size: 16px;
   outline: none;
+  min-height: 46px; /* toque confortável */
 }
 
 input:focus{
   border-color: rgba(34,197,94,.55);
-  box-shadow: 0 0 0 3px rgba(34,197,94,.15);
+  box-shadow: 0 0 0 3px rgba(34,197,94,.16);
 }
 
-hr{
-  border: none;
-  border-top: 1px solid var(--border);
-  margin: 16px 0;
-}
-
-/* ✅ Grid mobile-first: 1 coluna no celular */
+/* Layout geral: mobile-first 1 coluna */
 .grid{
-  display: grid;
+  display:grid;
   grid-template-columns: 1fr;
-  gap: 12px;
+  gap: var(--gap);
 }
 
-/* Desktop: 3 colunas para data/almoço/jantar */
-@media (min-width: 820px){
-  main.card{ padding: var(--pad-lg); }
-  .grid{
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-  }
-}
-
-/* Botões: grandes e fáceis de tocar */
+/* Botões */
 button{
-  border: 0;
-  border-radius: 14px;
+  border:0;
+  border-radius: 16px;
   padding: 12px 14px;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  min-height: 44px; /* toque confortável */
-  color: #07140a;
-  background: var(--primary);
-  transition: transform .04s ease, filter .15s ease, background .15s ease;
+  min-height: 46px;
+  transition: transform .06s ease, filter .15s ease;
+  user-select:none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-button:hover{ filter: brightness(1.05); }
 button:active{ transform: translateY(1px); }
+
+button:not(.secundario):not(.perigo){
+  background: var(--green);
+  color: #05120a;
+}
+button:not(.secundario):not(.perigo):hover{ filter: brightness(1.05); }
 
 button.secundario{
   background: rgba(148,163,184,.22);
-  color: #e2e8f0;
+  color:#e2e8f0;
 }
 
 button.perigo{
-  background: var(--danger);
-  color: #fff;
+  background: var(--red);
+  color:#fff;
 }
 
+/* ✅ Ações principais (Salvar/Hoje/Limpar) com cara de app */
 .actions{
-  display: grid;
-  grid-template-columns: 1fr; /* mobile: empilha */
+  display:grid;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
-/* Desktop: botões em linha */
-@media (min-width: 820px){
-  .actions{
-    grid-template-columns: repeat(3, 1fr);
-  }
+#btnSalvar{ grid-column: 1 / -1; } /* salvar fica grandão */
+
+@media (min-width: 520px){
+  #btnSalvar{ grid-column:auto; } /* em telas maiores vira normal */
+  .actions{ grid-template-columns: repeat(3, 1fr); }
 }
 
-/* Área "Exportar/Imprimir" */
+/* Área do mês + exportar/imprimir */
 .right{
-  display: grid;
-  grid-template-columns: 1fr; /* mobile: empilha */
+  display:grid;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
   align-content: end;
 }
 
-/* Desktop: botões lado a lado */
-@media (min-width: 820px){
-  .right{
-    grid-template-columns: auto auto;
-    justify-content: end;
-  }
+@media (max-width: 360px){
+  .right{ grid-template-columns: 1fr; } /* telas muito pequenas */
 }
 
-/* ✅ Tabela: no celular vira scroll horizontal */
+/* Separador */
+hr{
+  border:none;
+  border-top:1px solid var(--border);
+  margin: 16px 0;
+}
+
+/* ✅ Tabela: vira “cards” no celular (UX real) */
 .table-wrap{
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  border-radius: 14px;
+  width:100%;
   border: 1px solid var(--border);
+  border-radius: 16px;
   background: rgba(2,6,23,.18);
+  overflow: hidden;
 }
 
+/* Desktop/tablet: tabela normal */
 table{
-  width: 100%;
+  width:100%;
   border-collapse: collapse;
-  min-width: 640px; /* força scroll no celular */
 }
 
 thead th{
-  text-align: left;
-  font-size: 13px;
+  text-align:left;
+  font-size:13px;
   color: var(--muted);
-  padding: 12px 12px;
+  padding: 12px;
   border-bottom: 1px solid var(--border);
   background: rgba(2,6,23,.25);
 }
 
 tbody td{
-  padding: 12px 12px;
+  padding: 12px;
   border-bottom: 1px solid rgba(148,163,184,.10);
 }
 
-tbody tr:hover{
-  background: rgba(148,163,184,.06);
-}
+tbody tr:hover{ background: rgba(148,163,184,.06); }
 
-td.actions{
-  white-space: nowrap;
-}
+td.actions{ white-space: nowrap; }
 
 button.small{
   padding: 10px 12px;
-  border-radius: 12px;
+  border-radius: 14px;
   min-height: 40px;
   font-size: 14px;
 }
 
-/* Totais */
+/* ✅ Mobile Cards */
+@media (max-width: 720px){
+  thead{ display:none; }
+  table, tbody, tr, td{ display:block; width:100%; }
+  tbody tr{
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(148,163,184,.10);
+  }
+  tbody td{
+    border:0;
+    padding: 6px 0;
+    display:flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  /* rotulagem automática pelo atributo data-label (se não tiver, usamos nth-child fallback) */
+  tbody td::before{
+    content: attr(data-label);
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  /* fallback simples se seu HTML não usa data-label */
+  tbody td:nth-child(1)::before{ content:"Dia"; }
+  tbody td:nth-child(2)::before{ content:"Almoço"; }
+  tbody td:nth-child(3)::before{ content:"Jantar"; }
+  tbody td:nth-child(4)::before{ content:"Total do dia"; }
+  tbody td:nth-child(5)::before{ content:"Ações"; }
+
+  td.actions{
+    display:flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 8px;
+  }
+}
+
+/* Totais como cards */
 .totais{
-  display: grid;
+  display:grid;
   grid-template-columns: 1fr;
   gap: 10px;
   margin-top: 14px;
 }
 
-@media (min-width: 700px){
-  .totais{
-    grid-template-columns: repeat(3, 1fr);
-  }
+@media (min-width: 520px){
+  .totais{ grid-template-columns: repeat(3, 1fr); }
 }
 
 .box{
   border: 1px solid var(--border);
   background: rgba(2,6,23,.25);
-  border-radius: 14px;
-  padding: 12px;
-  display: flex;
+  border-radius: 16px;
+  padding: 12px 12px;
+  display:flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 10px;
@@ -239,31 +272,29 @@ button.small{
   background: rgba(34,197,94,.08);
 }
 
-/* Mensagem */
+/* Mensagens */
 .msg{
   min-height: 22px;
-  margin: 12px 0 0;
+  margin-top: 12px;
   color: #a7f3d0;
 }
 
-/* Cabeçalho só para impressão */
-.print-header{ display: none; }
-
 /* Impressão (PDF) */
-@media print{
-  body{ background: #fff; padding: 0; }
-  main.card{
-    width: 100%;
-    margin: 0;
-    border: 0;
-    box-shadow: none;
-    background: #fff;
-    color: #000;
-  }
+.print-header{ display:none; }
 
-  .actions, .right, #msg { display: none !important; }
-  .print-header{ display: block; color: #000; }
-  .table-wrap{ border: 0; }
-  table{ min-width: 0; }
-  thead th, tbody td{ border-color: #ddd; }
+@media print{
+  body{ background:#fff; padding:0; }
+  main.card{
+    width:100%;
+    margin:0;
+    border:0;
+    box-shadow:none;
+    background:#fff;
+    color:#000;
+  }
+  .actions, .right, #msg{ display:none !important; }
+  .print-header{ display:block; color:#000; }
+  .table-wrap{ border:0; }
+  thead{ display:table-header-group; }
+  table, tbody, tr, td{ display:table-row-group; }
 }
